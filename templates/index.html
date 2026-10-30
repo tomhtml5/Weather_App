@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Find the current weather for any city.">
+    <title>City Weather</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <main class="weather-app">
+      <header class="page-header">
+        <p class="eyebrow">YOUR LOCAL FORECAST</p>
+        <h1>Weather, wherever you are.</h1>
+        <p class="intro">Search for a city to see its current conditions.</p>
+      </header>
+
+      <form class="search-form" method="post">
+        <label for="city">City</label>
+        <div class="search-controls">
+          <input
+            id="city"
+            name="city"
+            type="text"
+            value="{{ city }}"
+            placeholder="e.g. Copenhagen"
+            maxlength="100"
+            autocomplete="address-level2"
+            required
+          >
+          <button type="submit">Get weather</button>
+        </div>
+      </form>
+
+      {% if error %}
+        <p class="message error" role="alert">{{ error }}</p>
+      {% endif %}
+
+      {% if weather %}
+        <section class="weather-card" aria-label="Current weather for {{ weather.location }}">
+          <div class="weather-heading">
+            <div>
+              <p class="eyebrow">CURRENT WEATHER</p>
+              <h2>{{ weather.location }}</h2>
+            </div>
+            <span class="weather-icon" aria-hidden="true">{{ weather.icon }}</span>
+          </div>
+          <p class="condition">{{ weather.condition }}</p>
+          <p class="temperature">{{ "%.0f"|format(weather.temperature) }}<span>°C</span></p>
+          <dl class="weather-details">
+            <div>
+              <dt>Feels like</dt>
+              <dd>{{ "%.0f"|format(weather.feels_like) }}°C</dd>
+            </div>
+            <div>
+              <dt>Humidity</dt>
+              <dd>{{ "%.0f"|format(weather.humidity) }}%</dd>
+            </div>
+            <div>
+              <dt>Wind</dt>
+              <dd>{{ "%.0f"|format(weather.wind_speed) }} km/h</dd>
+            </div>
+            <div>
+              <dt>Precipitation</dt>
+              <dd>{{ "%.1f"|format(weather.precipitation) }} mm</dd>
+            </div>
+          </dl>
+        </section>
+      {% endif %}
+
+      <footer>Weather data provided by Open-Meteo.</footer>
+    </main>
+  </body>
+</html>
